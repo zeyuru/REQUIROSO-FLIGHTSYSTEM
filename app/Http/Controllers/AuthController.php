@@ -25,7 +25,19 @@ public function register(Request $request)
         'status' => 'sometimes|string|in:Active,Inactive,Suspended'
     ]);
 
-    $status = UserStatus::where('status', $validatedData['status'])->first(); // ✅ Check correct column name
+    $status = null;
+
+    if (!empty($validatedData['status'])) {
+        $status = UserStatus::where('status', $validatedData['status'])->first();
+    }
+
+    if (!$status) {
+        $status = UserStatus::where('status', 'Active')->first();
+
+        if (!$status) {
+            return response()->json(['error' => 'Default user status not found'], 500);
+        }
+    }
 
     $user = User::create([
         'first_name' => $validatedData['first_name'],
@@ -38,6 +50,7 @@ public function register(Request $request)
 
     return response()->json(['user' => $user], 201);
 }
+
 
 
     public function login(Request $request)
