@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UserStatus extends Model
 {
     use HasFactory;
+
+    protected $table = 'statuses';
+
+    // Optional: if you don't have timestamps in the table or want to manage them manually
+    public $timestamps = true;
+
 }
